@@ -59,19 +59,15 @@ github.listen();
 // trigger
 github.on(options['<trigger>'], function () {
   var scriptPath = path.resolve(options['<script>']),
+      spawnOptions = {},
       verbose = options['--verbose'],
       child;
   if (verbose) {
     console.log('--> EXEC ' + scriptPath);
+    spawnOptions.stdio = 'inherit';
   }
-  child = child_process.spawn(scriptPath);
+  child = child_process.spawn(scriptPath, spawnOptions);
   if (verbose) {
-    child.stdout.on('data', function (data) {
-      console.log(data.toString());
-    });
-    child.stderr.on('data', function (data) {
-      console.error(data.toString());
-    });
     child.on('error', function (err) {
       console.error(err.stack);
     });
